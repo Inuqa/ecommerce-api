@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_210_523_033_955) do
+ActiveRecord::Schema.define(version: 20_210_523_050_623) do
   create_table 'active_storage_attachments', force: :cascade do |t|
     t.string 'name', null: false
     t.string 'record_type', null: false
@@ -46,6 +46,12 @@ ActiveRecord::Schema.define(version: 20_210_523_033_955) do
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'discarded_at'
     t.index ['discarded_at'], name: 'index_products_on_discarded_at'
+  end
+
+  create_table 'users', force: :cascade do |t|
+    t.string 'email'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
   end
 
   create_table 'variants', force: :cascade do |t|
