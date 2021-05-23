@@ -1,7 +1,10 @@
 class Admin::ProductsController < ApplicationController
   def index
-    products = Product.all
-    render json: products, status: :ok
+    @products = Product.all
+    @products = filter(@products)
+    @total_pages = (@products.count / 10.0).ceil
+    @products = @products.offset(params[:offset]) if params[:offset].present?
+    @products = @products.limit(10)
   end
 
   def create
@@ -22,6 +25,12 @@ class Admin::ProductsController < ApplicationController
   end
 
   private
+
+  def filter(products)
+    products = Product.filter_by_title(params[:title]) if params[:title].present?
+    # TODO: add soft delete
+    products
+  end
 
   def product_params
     params.permit(:title)
