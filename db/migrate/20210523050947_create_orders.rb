@@ -9,7 +9,7 @@ class CreateOrders < ActiveRecord::Migration[6.1]
       t.string :comuna
       t.string :phone
       t.string :postal_code
-      t.integer :status
+      t.integer :status, default: 0
 
       t.timestamps
     end

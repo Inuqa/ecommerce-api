@@ -49,7 +49,7 @@ ActiveRecord::Schema.define(version: 2021_05_23_050947) do
     t.string "comuna"
     t.string "phone"
     t.string "postal_code"
-    t.integer "status"
+    t.integer "status", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_orders_on_user_id"
