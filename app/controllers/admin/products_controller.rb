@@ -1,6 +1,6 @@
 class Admin::ProductsController < ApplicationController
   def index
-    @products = Product.all
+    @products = Product.kept
     @products = filter(@products)
     @total_pages = (@products.count / 10.0).ceil
     @products = @products.offset(params[:offset]) if params[:offset].present?
@@ -27,8 +27,8 @@ class Admin::ProductsController < ApplicationController
   private
 
   def filter(products)
+    products = Product.all if JSON.parse(params[:show_deleted])
     products = Product.filter_by_title(params[:title]) if params[:title].present?
-    # TODO: add soft delete
     products
   end
 
