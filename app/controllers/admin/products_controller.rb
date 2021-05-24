@@ -27,7 +27,7 @@ class Admin::ProductsController < ApplicationController
   private
 
   def filter(products)
-    products = Product.all if JSON.parse(params[:show_deleted])
+    products = Product.all if params[:show_deleted] == 'true'
     products = Product.filter_by_title(params[:title]) if params[:title].present?
     products
   end
