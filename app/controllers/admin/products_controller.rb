@@ -1,4 +1,6 @@
 class Admin::ProductsController < ApplicationController
+  before_action :authorized
+
   def index
     @products = Product.kept
     @products = filter(@products)
