@@ -10,4 +10,8 @@ Rails.application.routes.draw do
     resources :products, only: %i[index show]
     resources :variants, only: [:index]
   end
+
+  post '/login', to: 'sessions#create'
+  delete '/logout', to: 'sessions#destroy'
+  get '/current', to: 'admins#current'
 end
