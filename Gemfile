@@ -31,6 +31,9 @@ gem 'rack-cors'
 # Gem for soft delete
 gem 'discard', '~> 1.2'
 
+# Transbank sdk
+gem 'transbank-sdk'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
