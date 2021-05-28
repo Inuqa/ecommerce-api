@@ -1,4 +1,4 @@
-class Admin::VariantsController < ApplicationController
+class Api::Admin::VariantsController < ApplicationController
   def index
     variants = Variant.all
     render json: variants, status: :ok

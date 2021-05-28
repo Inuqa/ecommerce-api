@@ -1,4 +1,4 @@
-class VariantsController < ApplicationController
+class Api::VariantsController < ApplicationController
   def index
     ids = params[:ids]
     @variants = if ids

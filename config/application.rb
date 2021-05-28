@@ -38,5 +38,6 @@ module Api
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore
     config.api_only = false
+    config.hosts.clear
   end
 end

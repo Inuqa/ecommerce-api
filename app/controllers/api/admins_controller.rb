@@ -1,4 +1,4 @@
-class AdminsController < ApplicationController
+class Api::AdminsController < ApplicationController
   before_action :authorized
 
   def current

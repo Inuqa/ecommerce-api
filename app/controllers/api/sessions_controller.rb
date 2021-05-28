@@ -1,4 +1,4 @@
-class SessionsController < ApplicationController
+class Api::SessionsController < ApplicationController
   def create
     @admin = Admin.find_by(email: session_params[:email])
 

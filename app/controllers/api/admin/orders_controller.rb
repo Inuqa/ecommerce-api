@@ -1,4 +1,4 @@
-class Admin::OrdersController < ApplicationController
+class Api::Admin::OrdersController < ApplicationController
   before_action :authorized
 
   def index
