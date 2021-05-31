@@ -9,6 +9,8 @@ class Order < ApplicationRecord
 
   scope :filter_by_id, ->(id) { where id: id }
 
+  validates :name, :last_name, :address, :city, :comuna, :phone, :status, presence: true
+
   def payed_mail
     @order = Order.find(id)
     OrderMailer.with(order: @order).order_payed.deliver_later
