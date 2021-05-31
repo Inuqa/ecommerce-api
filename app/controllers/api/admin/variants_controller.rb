@@ -1,17 +1,34 @@
 class Api::Admin::VariantsController < ApplicationController
+  before_action :authorized
+
   def index
     variants = Variant.all
     render json: variants, status: :ok
   end
 
   def create
-    variant = Product.find(params[:product_id]).variants.create(variant_params)
-    render json: variant, status: :created
+    variant = Product.find(params[:product_id]).variants.new(variant_params)
+    variant.is_master = true unless variant.product.master
+    if variant.save
+      render json: variant, status: :created
+    else
+      render json: variant.errors, status: :bad_request
+    end
+  end
+
+  def edit
+    variant = Variant.find(params[:id])
+
+    if variant
+      render json: variant, status: :ok
+    else
+      render json: { message: 'Variante no encontrada' }, status: :not_found
+    end
   end
 
   def update
     variant = Variant.find(params[:id])
-    variant.update(params_params)
+    variant.update(variant_params)
     render json: variant, status: :accepted
   end
 
@@ -24,6 +41,6 @@ class Api::Admin::VariantsController < ApplicationController
   private
 
   def variant_params
-    params.permit(:price, :size, :stock, :is_master)
+    params.require(:variant).permit(:price, :size, :stock)
   end
 end
