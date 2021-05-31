@@ -11,18 +11,22 @@ class Api::OrdersController < ApplicationController
     end
 
     order.save
+    byebug
     response = Transbank::Webpay::WebpayPlus::Transaction.create(
       buy_order: order.id,
       session_id: 'noop',
       amount: total,
       return_url: 'http://localhost:2000/api/payment'
     )
-    render json: response, status: :ok
+    order.save
+    order.token = response.token
+    order.save
+    render json: { res: response, order: order }, status: :ok
   end
 
-  def commit
-    byebug
-  end
+  def commit; end
+
+  def show; end
 
   private
 
