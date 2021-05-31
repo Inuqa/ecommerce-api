@@ -10,8 +10,23 @@ class Api::Admin::ProductsController < ApplicationController
   end
 
   def create
-    product = Product.create(product_params)
-    render json: product, status: :created
+    product = Product.new(product_params)
+    product.discard
+    if product.save
+      render json: product, status: :created
+    else
+      render json: errors, status: :bad_request
+    end
+  end
+
+  def edit
+    product = Product.find(params[:id])
+
+    if product
+      render json: { product: product, image: polymorphic_url(product.master_image) }, status: :ok
+    else
+      render json: { message: 'Producto no encontrado' }, status: :not_found
+    end
   end
 
   def update
@@ -22,8 +37,17 @@ class Api::Admin::ProductsController < ApplicationController
 
   def destroy
     product = Product.find(params[:id])
-    product.destroy
+    product.discard
     render json: :no_content
+  end
+
+  def restore
+    product = Product.find(params[:id])
+    if product.undiscard
+      render json: product, status: :ok
+    else
+      render json: { message: 'Producto no pudo ser recuperado' }, status: :method_not_allowed
+    end
   end
 
   private
@@ -35,6 +59,6 @@ class Api::Admin::ProductsController < ApplicationController
   end
 
   def product_params
-    params.permit(:title)
+    params.require(:product).permit(:title, :master_image)
   end
 end
