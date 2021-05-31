@@ -7,6 +7,7 @@ Rails.application.routes.draw do
         resources :products do
           resources :variants
         end
+        get '/products/:id/restore', to: 'products#restore'
       end
       resources :products, only: %i[index show]
       resources :variants, only: [:index]
@@ -17,8 +18,7 @@ Rails.application.routes.draw do
       get '/current_user', to: 'admins#current'
 
       post '/payment', to: 'payments#commit'
-
-      post '/asd', to: 'cart#test'
+      get '/payments/:id', to: 'payments#show'
     end
   end
 end
