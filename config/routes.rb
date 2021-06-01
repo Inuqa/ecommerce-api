@@ -5,7 +5,9 @@ Rails.application.routes.draw do
       namespace :admin do
         resources :orders
         resources :products do
-          resources :variants
+          resources :variants do
+            get '/restore', to: 'variants#restore'
+          end
         end
         get '/products/:id/restore', to: 'products#restore'
       end

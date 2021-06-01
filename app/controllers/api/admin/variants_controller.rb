@@ -34,8 +34,17 @@ class Api::Admin::VariantsController < ApplicationController
 
   def destroy
     variant = Variant.find(params[:id])
-    variant.destroy
+    variant.discard
     render json: :no_content
+  end
+
+  def restore
+    variant = Variant.find(params[:id])
+    if variant.undiscard
+      render json: variant, status: :ok
+    else
+      render json: { message: 'Variante no pudo ser recuperada' }, status: :method_not_allowed
+    end
   end
 
   private
