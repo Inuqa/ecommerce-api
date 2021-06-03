@@ -19,11 +19,15 @@
 #   product.variants.create(price: 9990, size: 'l', stock: 10)
 # end
 #
+
+# User.create(email: 'seba.nrc@gmail.com')
+
 rangesdas = 1..20
 rangesdas.each do |_n|
   order = Order.new(user_id: 1, name: FFaker::NameES.first_name, last_name: FFaker::NameES.last_name,
                     address: FFaker::AddressCH.street_address, city: FFaker::AddressCH.city,
                     comuna: FFaker::AddressCH.neighborhood, phone: 111_111,
-                    postal_code: FFaker::AddressCH.postal_code)
+                    postal_code: FFaker::AddressCH.postal_code,
+                    amount: rand(9990..49_990))
   order.save!
 end
