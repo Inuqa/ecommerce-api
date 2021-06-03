@@ -10,8 +10,9 @@ class Api::OrdersController < ApplicationController
       total += line_item.variant.price * line_item.quantity
     end
 
+    order.amount = total
+
     order.save
-    byebug
     response = Transbank::Webpay::WebpayPlus::Transaction.create(
       buy_order: order.id,
       session_id: 'noop',
