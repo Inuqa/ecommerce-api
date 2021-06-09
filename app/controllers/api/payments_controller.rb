@@ -4,6 +4,7 @@ class Api::PaymentsController < ApplicationController
     order = Order.find_by(token: @token)
     res = Transbank::Webpay::WebpayPlus::Transaction.commit(token: @token)
 
+    payment = order.payments.create(payload: res)
     if res.status == 'AUTHORIZED'
       order.status = 'pagado'
       order.save
