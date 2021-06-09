@@ -55,7 +55,7 @@ class Api::Admin::ProductsController < ApplicationController
   def filter(products)
     products = Product.all if params[:show_deleted] == 'true'
     products = Product.filter_by_title(params[:title]) if params[:title].present?
-    products
+    products.order(id: :asc)
   end
 
   def product_params
