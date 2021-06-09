@@ -1,4 +1,5 @@
 class Order < ApplicationRecord
+  has_many :payments
   enum status: { pendiente: 0, pagado: 1, enviado: 2, cancelado: 3 }
   belongs_to :user
   has_many :line_items, dependent: :destroy
