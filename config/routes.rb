@@ -20,7 +20,7 @@ Rails.application.routes.draw do
       get '/current_user', to: 'admins#current'
 
       post '/payment', to: 'payments#commit'
-      get '/payments/:id', to: 'payments#show'
+      get '/payments/:uuid', to: 'payments#show'
     end
   end
 end

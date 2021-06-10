@@ -1,4 +1,5 @@
 class Order < ApplicationRecord
+  after_create :reload_uuid
   has_many :payments
   enum status: { pendiente: 0, pagado: 1, enviado: 2, cancelado: 3 }
   belongs_to :user
@@ -19,5 +20,9 @@ class Order < ApplicationRecord
 
   def status_payed?
     status == 'pagado'
+  end
+
+  def reload_uuid
+    self[:uuid] = self.class.where(id: id).pluck(:uuid).first if attributes.key? 'uuid'
   end
 end
