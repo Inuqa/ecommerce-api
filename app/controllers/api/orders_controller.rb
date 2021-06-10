@@ -12,17 +12,30 @@ class Api::OrdersController < ApplicationController
 
     order.amount = total
 
-    order.save
-    response = Transbank::Webpay::WebpayPlus::Transaction.create(
-      buy_order: order.id,
-      session_id: 'noop',
-      amount: total,
-      return_url: 'http://localhost:2000/api/payment'
-    )
-    order.save
-    order.token = response.token
-    order.save
-    render json: { res: response, order: order }, status: :ok
+    case order.pay_method
+    when 'transfer'
+      if order.save
+        render json: { order: order, type: 'transfer' }, status: :created
+      else
+        render json: { message: 'hubo un error al crear la order, por favor intentar mas tarde' },
+               status: :unprocessable_entity
+      end
+    when 'webpay'
+      order.save
+      response = Transbank::Webpay::WebpayPlus::Transaction.create(
+        buy_order: order.id,
+        session_id: 'noop',
+        amount: total,
+        return_url: 'http://localhost:2000/api/payment'
+      )
+      order.token = response.token
+      if order.save
+        render json: { res: response, order: order, type: 'webpay' }, status: :ok
+      else
+        render json: { message: 'hubo un error al crear la order por favor intentar mas tarde' },
+               status: :unprocessable_entity
+      end
+    end
   end
 
   def commit; end
@@ -32,7 +45,7 @@ class Api::OrdersController < ApplicationController
   private
 
   def order_params
-    params.require(:order).permit(:name, :last_name, :address, :city, :comuna, :phone)
+    params.require(:order).permit(:name, :last_name, :address, :city, :comuna, :phone, :pay_method, :shipping_method)
   end
 
   def cart_params
