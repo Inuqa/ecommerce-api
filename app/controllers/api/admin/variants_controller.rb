@@ -2,7 +2,7 @@ class Api::Admin::VariantsController < ApplicationController
   before_action :authorized
 
   def index
-    variants = Variant.all
+    variants = Product.find(params[:product_id]).variants.order(size: :asc)
     render json: variants, status: :ok
   end
 
@@ -17,7 +17,7 @@ class Api::Admin::VariantsController < ApplicationController
   end
 
   def edit
-    variant = Variant.find(params[:id])
+    variant = Product.find(params[:product_id]).variants.find(params[:id])
 
     if variant
       render json: variant, status: :ok
@@ -27,19 +27,19 @@ class Api::Admin::VariantsController < ApplicationController
   end
 
   def update
-    variant = Variant.find(params[:id])
+    variant = Product.find(params[:product_id]).variants.find(params[:id])
     variant.update(variant_params)
     render json: variant, status: :accepted
   end
 
   def destroy
-    variant = Variant.find(params[:id])
+    variant = Product.find(params[:product_id]).variants.find(params[:id])
     variant.discard
     render json: :no_content
   end
 
   def restore
-    variant = Variant.find(params[:id])
+    variant = Product.find(params[:product_id]).variants.find(params[:variant_id])
     if variant.undiscard
       render json: variant, status: :ok
     else
