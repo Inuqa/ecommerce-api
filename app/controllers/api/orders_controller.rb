@@ -1,33 +1,33 @@
-class Api::OrdersController < ApplicationController
-  def create
-    user = User.find_or_create_by(email: params[:email])
-    order = user.orders.new(order_params)
-    cart_params.each do |variant, quantity|
-      order.line_items.new(quantity: quantity.to_i, variant_id: variant.to_i)
-    end
-    total = 0
-    order.line_items.each do |line_item|
-      total += line_item.variant.price * line_item.quantity
+module Api
+  class OrdersController < ApplicationController
+    before_action :set_user, only: [:create]
+    def create
+      order = @user.orders.new(order_params)
+
+      process_cart(order)
+
+      case order.pay_method
+      when PaymentMethods::TRANSFER
+        transfer(order)
+      when PaymentMethods::WEBPAY
+        webpay(order)
+      end
     end
 
-    order.amount = total
+    private
 
-    case order.pay_method
-    when 'transfer'
+    def transfer(order)
       if order.save
         render json: { order: order, type: 'transfer' }, status: :created
       else
         render json: { message: 'hubo un error al crear la order, por favor intentar mas tarde' },
                status: :unprocessable_entity
       end
-    when 'webpay'
+    end
+
+    def webpay(order)
       order.save
-      response = Transbank::Webpay::WebpayPlus::Transaction.create(
-        buy_order: order.id,
-        session_id: 'noop',
-        amount: total,
-        return_url: 'http://localhost:2000/api/payment'
-      )
+      response = webpay_response(order.id, order.amount)
       order.token = response.token
       if order.save
         render json: { res: response, order: order, type: 'webpay' }, status: :ok
@@ -36,19 +36,35 @@ class Api::OrdersController < ApplicationController
                status: :unprocessable_entity
       end
     end
-  end
 
-  def commit; end
+    def order_params
+      params.require(:order).permit(:name, :last_name, :address, :city, :comuna, :phone, :pay_method, :shipping_method)
+    end
 
-  def show; end
+    def webpay_response(id, total)
+      Transbank::Webpay::WebpayPlus::Transaction.create(
+        buy_order: id,
+        session_id: 'noop',
+        amount: total,
+        return_url: 'http://localhost:2000/api/payment'
+      )
+    end
 
-  private
+    def set_user
+      @user ||= User.find_by(email: params[:email])
+    end
 
-  def order_params
-    params.require(:order).permit(:name, :last_name, :address, :city, :comuna, :phone, :pay_method, :shipping_method)
-  end
+    def cart_params
+      params.require(:cart)
+    end
 
-  def cart_params
-    params.require(:cart)
+    def process_cart(order)
+      total = 0
+      cart_params.each do |variant, quantity|
+        line_item = order.line_items.new(quantity: quantity.to_i, variant_id: variant.to_i)
+        total += line_item.variant.price * line_item.quantity
+      end
+      order.amount = total
+    end
   end
 end
