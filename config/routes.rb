@@ -5,9 +5,10 @@ Rails.application.routes.draw do
       namespace :admin do
         resources :orders
         resources :products do
-          resources :variants do
-            get '/restore', to: 'variants#restore'
-          end
+          resources :variants, only: %i[index create]
+        end
+        resources :variants, except: %i[index create] do
+          get '/restore', to: 'variants#restore'
         end
         get '/products/:id/restore', to: 'products#restore'
       end
