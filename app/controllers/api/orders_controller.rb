@@ -51,7 +51,7 @@ module Api
     end
 
     def set_user
-      @user ||= User.find_by(email: params[:email])
+      @user ||= User.find_or_create_by(email: params[:email])
     end
 
     def cart_params
