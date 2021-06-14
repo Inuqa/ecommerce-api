@@ -28,4 +28,6 @@ class Order < ApplicationRecord
   def reload_uuid
     self[:uuid] = self.class.where(id: id).pluck(:uuid).first if attributes.key? 'uuid'
   end
+
+  delegate :email, to: :user
 end
