@@ -11,4 +11,6 @@ class Variant < ApplicationRecord
 
   validates :price, numericality: { only_integer: true }
   validates :stock, numericality: { only_integer: true }
+
+  delegate :title, to: :product
 end
