@@ -1,4 +1,13 @@
 Rails.application.routes.draw do
+  namespace :api do
+    namespace :admin do
+      get 'categories/index'
+      get 'categories/show'
+      get 'categories/update'
+      get 'categories/destroy'
+      get 'categories/create'
+    end
+  end
   defaults format: :json do
     namespace :api do
       namespace :admin do
