@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_05_004325) do
+ActiveRecord::Schema.define(version: 2021_09_05_005814) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -101,6 +101,8 @@ ActiveRecord::Schema.define(version: 2021_09_05_004325) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "discarded_at"
+    t.bigint "category_id"
+    t.index ["category_id"], name: "index_products_on_category_id"
     t.index ["discarded_at"], name: "index_products_on_discarded_at"
   end
 
@@ -129,5 +131,6 @@ ActiveRecord::Schema.define(version: 2021_09_05_004325) do
   add_foreign_key "line_items", "variants"
   add_foreign_key "orders", "users"
   add_foreign_key "payments", "orders"
+  add_foreign_key "products", "categories"
   add_foreign_key "variants", "products"
 end
