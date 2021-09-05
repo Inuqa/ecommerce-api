@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  get 'categories/index'
+  get 'categories/update'
+  get 'categories/edit'
+  get 'categories/create'
+  get 'categories/destroy'
+  get 'categories/show'
   get 'cart/index'
   defaults format: :json do
     namespace :api do

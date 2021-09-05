@@ -62,9 +62,18 @@ module Api
       total = 0
       cart_params.each do |variant, quantity|
         line_item = order.line_items.new(quantity: quantity.to_i, variant_id: variant.to_i)
+        process_stock(line_item, quantity.to_i)
         total += line_item.variant.price * line_item.quantity
       end
       order.amount = total
+    end
+
+    def process_stock(line_item, quantity)
+      if quantity <= line_item.variant.stock
+        line_item.variant.update(stock: 0)
+      else
+        line_item.variant.update(stock: line_item.variant.stock - quantity)
+      end
     end
   end
 end
