@@ -59,6 +59,6 @@ class Api::Admin::ProductsController < ApplicationController
   end
 
   def product_params
-    params.require(:product).permit(:title, :master_image)
+    params.require(:product).permit(:title, images: [])
   end
 end

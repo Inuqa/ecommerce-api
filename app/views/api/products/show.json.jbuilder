@@ -1,6 +1,7 @@
 json.extract! @product, :id, :title, :discarded_at
 json.master_image polymorphic_url(@product.master_image)
 json.master_price @product.master.price if @product&.master&.price
+json.description @product.description
 json.variants @product.variants do |variant|
   json.id variant.id
   json.title @product.title
