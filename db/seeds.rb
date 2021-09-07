@@ -8,9 +8,11 @@
 
 Variant.delete_all
 Product.delete_all
+Category.delete_all
+Category.create(name: 'Polera')
 rangesdas = 1..20
 rangesdas.each do |_n|
-  product = Product.new(title: FFaker::Product.product)
+  product = Product.new(title: FFaker::Product.product, category_id: 1)
   product.master_image.attach(io: File.open(Rails.root.join('public/200x250.png')), filename: '200x250.png',
                               content_type: 'image/png')
   product.save!
