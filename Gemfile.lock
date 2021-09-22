@@ -61,6 +61,7 @@ GEM
       tzinfo (~> 2.0)
       zeitwerk (~> 2.3)
     ast (2.4.2)
+    awesome_print (1.9.2)
     bcrypt (3.1.16)
     bootsnap (1.7.5)
       msgpack (~> 1.0)
@@ -189,6 +190,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  awesome_print
   bcrypt (~> 3.1.7)
   bootsnap (>= 1.4.4)
   byebug
@@ -212,4 +214,4 @@ RUBY VERSION
    ruby 2.6.6p146
 
 BUNDLED WITH
-   2.2.15
+   2.2.27

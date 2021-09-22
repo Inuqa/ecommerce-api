@@ -1,11 +1,11 @@
 class Api::CategoriesController < ApplicationController
   def index
-    categories = Category.all
-    render json: { categories: categories }, status: :ok
+    @categories = Category.all
   end
 
   def show
-    category = Category.find(params[:id])
-    render json: category.products, status: :ok
+    name = params[:name].include?('_') ? params[:name].gsub!('_', ' ') : params[:name]
+    @category = Category.find_by("lower(name) = '#{name.downcase}'")
+    @total_pages = (@category.products.kept.count / 12.0).ceil
   end
 end

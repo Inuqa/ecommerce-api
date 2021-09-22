@@ -9,16 +9,21 @@
 Variant.delete_all
 Product.delete_all
 Category.delete_all
-Category.create(name: 'Polera')
-rangesdas = 1..20
-rangesdas.each do |_n|
-  product = Product.new(title: FFaker::Product.product, category_id: 1)
-  product.master_image.attach(io: File.open(Rails.root.join('public/200x250.png')), filename: '200x250.png',
-                              content_type: 'image/png')
-  product.save!
-  product.variants.create(price: 9990, size: 's', stock: 10, is_master: true)
-  product.variants.create(price: 9990, size: 'm', stock: 10)
-  product.variants.create(price: 9990, size: 'l', stock: 10)
+Category.create(name: 'Fuentes de poder')
+Category.create(name: 'Tarjetas de video')
+Category.create(name: 'Placas madre')
+Category.create(name: 'Procesadores')
+
+categories = Category.all
+categories.each do |category|
+  (1..14).each do |_n|
+    product = Product.new(title: FFaker::Product.product, category_id: category.id)
+    product.images.attach(io: File.open(Rails.root.join('public/1.png')), filename: '200x250.png',
+                          content_type: 'image/png')
+    product.images.attach(io: File.open(Rails.root.join('public/2.png')), filename: '200x250.png',
+                          content_type: 'image/png')
+    product.save!
+  end
 end
 
 # User.create(email: 'seba.nrc@gmail.com')

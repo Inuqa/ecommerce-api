@@ -43,6 +43,7 @@ group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'ffaker'
   gem 'rubocop-rails', require: false
+  gem 'awesome_print'
 end
 
 group :development do

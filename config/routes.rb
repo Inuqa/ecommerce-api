@@ -12,7 +12,7 @@ Rails.application.routes.draw do
         end
         get '/products/:id/restore', to: 'products#restore'
       end
-      resources :categories, only: %i[index show]
+      resources :categories, param: :name, only: %i[index show]
       resources :products, only: %i[index show]
       resources :variants, only: [:index]
       resources :orders, only: [:create]

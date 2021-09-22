@@ -2,7 +2,8 @@ class Product < ApplicationRecord
   include Discard::Model
 
   belongs_to :category
-  has_one_attached :master_image
+  has_many_attached :images
+  has_many :properties
   has_many :variants
   has_one :master, -> { where(is_master: true) }, inverse_of: :product, class_name: 'Variant'
 
