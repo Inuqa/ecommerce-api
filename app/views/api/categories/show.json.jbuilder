@@ -1,4 +1,4 @@
-json.products @category.products.limit(12) do |product|
+json.products @products do |product|
   json.extract!(product, :id, :title)
   json.master_image polymorphic_url(product.images.first)
   json.price product.master.price if product.master

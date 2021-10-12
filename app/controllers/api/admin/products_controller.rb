@@ -11,6 +11,12 @@ class Api::Admin::ProductsController < ApplicationController
 
   def create
     product = Product.new(product_params)
+    if params[:product][:product_properties_ids].present?
+      params[:product][:product_properties_ids].each do |id|
+        pr = ProductProperty.find(id)
+        product.product_properties << pr
+      end
+    end
     product.discard
     if product.save
       render json: product, status: :created
@@ -22,8 +28,13 @@ class Api::Admin::ProductsController < ApplicationController
   def edit
     product = Product.find(params[:id])
 
+    images = []
+    product.images.each do |image|
+      images << image_to_base64(image)
+    end
+
     if product
-      render json: { product: product, image: polymorphic_url(product.master_image) }, status: :ok
+      render json: { product: product, images: images }, status: :ok
     else
       render json: { message: 'Producto no encontrado' }, status: :not_found
     end
@@ -59,6 +70,8 @@ class Api::Admin::ProductsController < ApplicationController
   end
 
   def product_params
-    params.require(:product).permit(:title, images: [])
+    params.require(:product).permit(
+      :title, :category_id, images: []
+    )
   end
 end

@@ -12,10 +12,15 @@ Rails.application.routes.draw do
         end
         get '/products/:id/restore', to: 'products#restore'
       end
-      resources :categories, param: :name, only: %i[index show]
+      resources :categories, param: :name, only: %i[index show] do
+        member do
+          get :category_properties
+        end
+      end
       resources :products, only: %i[index show]
       resources :variants, only: [:index]
       resources :orders, only: [:create]
+      resources :properties
 
       post '/login', to: 'sessions#create'
       delete '/logout', to: 'sessions#destroy'

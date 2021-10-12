@@ -1,5 +1,5 @@
 class Api::Admin::CategoriesController < ApplicationController
-  before_action :set_category, only: %i[show update destroy]
+  before_action :set_category, only: %i[show edit update destroy]
   before_action :authorized
 
   def index
@@ -8,7 +8,14 @@ class Api::Admin::CategoriesController < ApplicationController
   end
 
   def show
-    render json: category, status: :ok
+    render json: @category, status: :ok
+  end
+
+  def edit
+    @encoded_image = image_to_base64(@category.image)
+    respond_to do |format|
+      format.json
+    end
   end
 
   def update
@@ -29,17 +36,17 @@ class Api::Admin::CategoriesController < ApplicationController
     if category.save
       render json: category, status: :created
     else
-      render json: 'algo salio mal', status: :bad_request
+      render json: 'Algo salio mal', status: :bad_request
     end
   end
 
   private
 
   def set_category
-    @category = Categories.find(params[:id])
+    @category = Category.find(params[:id])
   end
 
   def category_params
-    params.require(:category).permit(:name)
+    params.require(:category).permit(:name, :image)
   end
 end

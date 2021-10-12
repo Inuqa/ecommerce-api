@@ -1,7 +1,13 @@
 class ApplicationController < ActionController::Base
   skip_before_action :verify_authenticity_token
 
-  helper_method :login!, :logged_in?, :current_user, :authorized_user?, :logout!, :set_user
+  helper_method :login!, :logged_in?, :current_user, :authorized_user?, :logout!, :set_user, :image_to_base64
+
+  def image_to_base64(image)
+    image.open do |img|
+      "data:image/png;base64,#{Base64.strict_encode64(img.read)}"
+    end
+  end
 
   def login!
     session[:admin] = @admin

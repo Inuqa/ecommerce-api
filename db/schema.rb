@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_07_224453) do
+ActiveRecord::Schema.define(version: 2021_09_24_012551) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -98,13 +98,16 @@ ActiveRecord::Schema.define(version: 2021_09_07_224453) do
 
   create_table "product_properties", force: :cascade do |t|
     t.string "value"
-    t.bigint "product_id", null: false
     t.bigint "property_id", null: false
     t.integer "position"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["product_id"], name: "index_product_properties_on_product_id"
     t.index ["property_id"], name: "index_product_properties_on_property_id"
+  end
+
+  create_table "product_properties_products", id: false, force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.bigint "product_property_id", null: false
   end
 
   create_table "products", force: :cascade do |t|
@@ -122,6 +125,8 @@ ActiveRecord::Schema.define(version: 2021_09_07_224453) do
     t.string "name", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "category_id"
+    t.index ["category_id"], name: "index_properties_on_category_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -149,8 +154,8 @@ ActiveRecord::Schema.define(version: 2021_09_07_224453) do
   add_foreign_key "line_items", "variants"
   add_foreign_key "orders", "users"
   add_foreign_key "payments", "orders"
-  add_foreign_key "product_properties", "products"
   add_foreign_key "product_properties", "properties"
   add_foreign_key "products", "categories"
+  add_foreign_key "properties", "categories"
   add_foreign_key "variants", "products"
 end
